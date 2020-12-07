@@ -3,6 +3,8 @@ const mongoose = require('mongoose')
 
 const noteSchema = new mongoose.Schema({
 
+
+    // id: mongoose.Schema.ObjectId,
     title: {
         type: String,
         required: true
@@ -14,6 +16,7 @@ const noteSchema = new mongoose.Schema({
     }
 
 })
+
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -35,6 +38,7 @@ const userSchema = new mongoose.Schema({
         min: 6
     },
     notes: [noteSchema],
+    tags: [],
     date: {
         type: Date,
         default: Date.now
