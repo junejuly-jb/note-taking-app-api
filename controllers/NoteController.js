@@ -31,7 +31,7 @@ const myNotes = (req, res) => {
 
     .catch(err => {
 
-        return res.status(400).send(res)
+        return res.status(400).send(err)
 
     })
 
@@ -66,4 +66,17 @@ const updateNote = async (req, res) =>
             return res.status(200).send(doc)
         })
 }
-module.exports = { createNote, myNotes, noteDetails, deleteNote, updateNote}
+
+const bulkDeleteNote = async (req, res) => { 
+    
+
+    // return res.status(200).send(req.body.noteId)
+    await User.updateMany({ _id: req.user }, { $pull: { "notes": { _id: req.body.noteId }}})
+        .then(response => {
+        return res.status(200).json({message: 'Deleted successfully'})
+        })
+        .catch(err => {
+        return res.status(500).json({message: 'error occured'})
+    })
+}
+module.exports = { createNote, myNotes, noteDetails, deleteNote, updateNote, bulkDeleteNote}

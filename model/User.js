@@ -13,7 +13,9 @@ const noteSchema = new mongoose.Schema({
     content: {
         type: String,
         required: true
-    }
+    },
+
+    tags: Array
 
 })
 
@@ -38,7 +40,7 @@ const userSchema = new mongoose.Schema({
         min: 6
     },
     notes: [noteSchema],
-    tags: [],
+    customTags: [],
     date: {
         type: Date,
         default: Date.now
