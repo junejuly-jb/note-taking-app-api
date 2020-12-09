@@ -79,4 +79,18 @@ const bulkDeleteNote = async (req, res) => {
         return res.status(500).json({message: 'error occured'})
     })
 }
-module.exports = { createNote, myNotes, noteDetails, deleteNote, updateNote, bulkDeleteNote}
+
+const addCustomTag = async (req, res) => {
+
+    await User.findOne({ _id: req.user })
+        .then(record => {
+            record.customTags.push(req.body.tag)
+            record.save()
+            return res.status(200).json({ message: 'tag added!' })
+                
+        .catch(err => { return res.send(err)})
+    })
+
+}
+
+module.exports = { createNote, myNotes, noteDetails, deleteNote, updateNote, bulkDeleteNote, addCustomTag}
