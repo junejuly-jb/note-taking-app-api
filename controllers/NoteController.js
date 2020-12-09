@@ -39,10 +39,31 @@ const myNotes = (req, res) => {
 
 const noteDetails = async (req, res) => { 
 
-
     // return res.status(200).json(req.params.id)
     const result = await User.findOne({ "_id": req.user }, { notes: {$elemMatch: {_id: req.params.id}} })
     return res.status(200).send(result.notes)
+
 }
 
-module.exports = { createNote, myNotes, noteDetails }
+const deleteNote = async (req, res) =>
+    {
+        await User.update({ _id: req.user }, { $pull: { "notes": { _id: req.params.id } } }, {multi: true})
+            .then(() => { return res.status(200).send('Success') })
+            .catch(err => { return res.status(500).send('error deleting note') })
+    }
+
+
+const updateNote = async (req, res) =>
+{
+
+    const user = await User.find({ _id: req.user, "notes._id": req.params.id })
+    if(user.length == 0) return res.status(201).send('unable to edit this note')
+
+
+    User.findOneAndUpdate({ _id: req.user, 'notes._id': req.params.id },{ $set: {"notes.$.title": req.body.title,"notes.$.content": req.body.content,}},
+        { returnOriginal: false, useFindAndModify: false }, (err, doc) => { 
+            if (err) return res.status(500).send('an error occured')
+            return res.status(200).send(doc)
+        })
+}
+module.exports = { createNote, myNotes, noteDetails, deleteNote, updateNote}

@@ -13,4 +13,8 @@ router.post('/register', AuthController.register)
 router.post('/login', AuthController.login)
 router.post('/createNote', authenticate, NoteController.createNote)
 
+router.put('/notes/:id', authenticate, NoteController.deleteNote)
+router.put('/updateNote/:id', authenticate, NoteController.updateNote)
+
+
 module.exports = router
