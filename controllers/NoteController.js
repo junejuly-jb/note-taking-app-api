@@ -52,4 +52,18 @@ const deleteNote = async (req, res) =>
             .catch(err => { return res.status(500).send('error deleting note') })
     }
 
-module.exports = { createNote, myNotes, noteDetails, deleteNote}
+
+const updateNote = async (req, res) =>
+{
+
+    const user = await User.find({ _id: req.user, "notes._id": req.params.id })
+    if(user.length == 0) return res.status(201).send('unable to edit this note')
+
+
+    User.findOneAndUpdate({ _id: req.user, 'notes._id': req.params.id },{ $set: {"notes.$.title": req.body.title,"notes.$.content": req.body.content,}},
+        { returnOriginal: false, useFindAndModify: false }, (err, doc) => { 
+            if (err) return res.status(500).send('an error occured')
+            return res.status(200).send(doc)
+        })
+}
+module.exports = { createNote, myNotes, noteDetails, deleteNote, updateNote}
