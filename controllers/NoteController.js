@@ -93,4 +93,29 @@ const addCustomTag = async (req, res) => {
 
 }
 
-module.exports = { createNote, myNotes, noteDetails, deleteNote, updateNote, bulkDeleteNote, addCustomTag}
+const setUnsetArchiveStatus = async (req, res) => {
+
+    // return res.send(req.body.status)
+
+    if (req.body.status == true) {
+        await User.findOneAndUpdate({ _id: req.user, "notes._id": req.params.id }, { $set: { "notes.$.archive": false } },
+            { returnOriginal: false, useFindAndModify: false }, (err, document) => { 
+                if(err) return res.status(500).send(err)
+                return res.status(200).send(document)
+            })
+    }
+    else {
+        await User.findOneAndUpdate({ _id: req.user, "notes._id": req.params.id }, { $set: { "notes.$.archive": true } },
+            { returnOriginal: false, useFindAndModify: false }, (err, document) => {
+                if (err) return res.status(500).send(err)
+                return res.status(200).send(document)
+            })
+    }
+
+}
+
+module.exports = {
+    createNote, myNotes, noteDetails, deleteNote,
+    updateNote, bulkDeleteNote, addCustomTag,
+    setUnsetArchiveStatus
+}

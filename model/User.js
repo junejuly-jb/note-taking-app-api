@@ -15,7 +15,15 @@ const noteSchema = new mongoose.Schema({
         required: true
     },
 
-    tags: Array
+    pinned: {
+        type: Boolean,
+        default: false
+    },
+    tags: Array,
+    archive: {
+        type: Boolean,
+        default: false
+    }
 
 })
 
