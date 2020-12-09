@@ -13,6 +13,7 @@ router.post('/register', AuthController.register)
 router.post('/login', AuthController.login)
 router.post('/createNote', authenticate, NoteController.createNote)
 router.post('/bulkDeleteNote', authenticate, NoteController.bulkDeleteNote)
+router.post('/addCustomTag', authenticate, NoteController.addCustomTag)
 
 router.put('/notes/:id', authenticate, NoteController.deleteNote)
 router.put('/updateNote/:id', authenticate, NoteController.updateNote)
